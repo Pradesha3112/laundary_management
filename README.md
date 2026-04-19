@@ -163,34 +163,6 @@ Initially attempted MySQL but switched to SQLite because:
 - ✅ **Perfect for prototypes** - easy to demonstrate
 - ✅ **Flask-SQLAlchemy compatible** - same code works
 
----
-
-## 📁 Project Structure
-laundry-management/
-│
-├── app.py # Main Flask application (routes, logic)
-├── database.py # SQLAlchemy models (Order, Garment)
-├── laundry.db # SQLite database (auto-created on first run)
-│
-├── templates/ # HTML templates
-│ ├── index.html # Dashboard with stats, filters, orders table
-│ ├── create_order.html # New order form with dynamic garment rows
-│ └── update_status.html # Status update page with order details
-│
-├── static/ # Static files
-│ └── style.css # External CSS (fallback, inline used primarily)
-│
-├── screenshots/ # Application screenshots for documentation
-│ ├── dashboard.png
-│ ├── create-order.png
-│ ├── order-calculation.png
-│ ├── orderlist.png
-│ ├── update-status.png
-│ └── dark-mode.png
-│
-└── README.md 
-
-
 
 ---
 
@@ -234,4 +206,3 @@ The application has a **full web interface** - no Postman needed!
 ### Database
 The database is created using SQLite. The database file is located at `/app/database.db`.
 
-### Deployment  
