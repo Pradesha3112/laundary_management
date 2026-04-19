@@ -7,9 +7,16 @@ import os
 
 app = Flask(__name__)
 
-# Database configuration
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'laundry.db')
+# Database configurationimport os
+
+# For Render deployment - use /tmp for writable storage
+if os.environ.get('RENDER'):
+    db_path = '/tmp/laundry.db'
+else:
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    db_path = os.path.join(basedir, 'laundry.db')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize database
