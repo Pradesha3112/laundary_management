@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Order Status</title>
+    <style>
+        /* Light Theme (Default) */
+        [data-theme="light"] {
+            --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-secondary: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #555555;
+            --text-muted: #888888;
+            --border-color: #e0e0e0;
+            --section-bg: #f8f9fa;
+            --shadow: rgba(0,0,0,0.3);
+        }
+        
+        /* Dark Theme */
+        [data-theme="dark"] {
+            --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --bg-secondary: #1e1e2f;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --text-muted: #888888;
+            --border-color: #2a2a4a;
+            --section-bg: #2a2a4a;
+            --shadow: rgba(0,0,0,0.5);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; 
+            background: var(--bg-primary); 
+            min-height: 100vh; 
+            padding: 20px;
+            transition: background 0.3s ease;
+        }
+        
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: var(--bg-secondary); 
+            border-radius: 20px; 
+            padding: 30px; 
+            box-shadow: 0 20px 60px var(--shadow);
+            transition: background 0.3s ease;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-brand h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-link {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: var(--text-primary);
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover {
+            background: var(--section-bg);
+        }
+        
+        /* Theme Toggle */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--section-bg);
+            border-radius: 15px;
+            cursor: pointer;
+            border: 2px solid var(--border-color);
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        
+        [data-theme="dark"] .toggle-slider {
+            transform: translateX(30px);
+        }
+        
+        .toggle-icon {
+            font-size: 18px;
+        }
+        
+        h1, h2, h3 { color: var(--text-primary); }
+        h2 { margin-bottom: 20px; }
+        h3 { margin-bottom: 15px; color: var(--text-secondary); }
+        
+        .btn { 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 14px; 
+            font-weight: 600; 
+            text-decoration: none; 
+            display: inline-block; 
+            transition: all 0.3s; 
+        }
+        
+        .btn-primary { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: white; 
+        }
+        
+        .btn-primary:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); 
+        }
+        
+        .btn-outline { 
+            background: transparent; 
+            border: 2px solid #667eea; 
+            color: #667eea; 
+        }
+        
+        [data-theme="dark"] .btn-outline { color: #8b9dff; border-color: #8b9dff; }
+        
+        .btn-outline:hover { background: #667eea; color: white; }
+        .btn-large { padding: 15px 30px; font-size: 16px; }
+        
+        .order-summary { 
+            background: var(--section-bg); 
+            padding: 25px; 
+            border-radius: 15px; 
+            margin-bottom: 25px; 
+        }
+        
+        .detail-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 20px; 
+            margin-top: 20px; 
+        }
+        
+        .detail-item { 
+            display: flex; 
+            flex-direction: column; 
+        }
+        
+        .detail-item label { 
+            font-size: 12px; 
+            text-transform: uppercase; 
+            color: var(--text-muted); 
+            margin-bottom: 5px; 
+        }
+        
+        .detail-item span { 
+            font-size: 18px; 
+            font-weight: 600; 
+            color: var(--text-primary); 
+        }
+        
+        .detail-item .highlight { 
+            color: #667eea; 
+            font-size: 22px; 
+        }
+        
+        .status-badge { 
+            padding: 5px 12px; 
+            border-radius: 20px; 
+            font-size: 12px; 
+            font-weight: 600; 
+            text-transform: uppercase; 
+            display: inline-block; 
+        }
+        
+        .status-received { background: #fef3c7; color: #d97706; }
+        .status-processing { background: #dbeafe; color: #2563eb; }
+        .status-ready { background: #d1fae5; color: #059669; }
+        .status-delivered { background: #e5e7eb; color: #6b7280; }
+        
+        .garments-summary { 
+            background: var(--section-bg); 
+            padding: 25px; 
+            border-radius: 15px; 
+            margin-bottom: 25px; 
+        }
+        
+        .mini-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 15px; 
+        }
+        
+        .mini-table th { 
+            padding: 12px; 
+            text-align: left; 
+            background: var(--bg-secondary); 
+            font-weight: 600; 
+            color: var(--text-secondary);
+        }
+        
+        .mini-table td { 
+            padding: 12px; 
+            border-bottom: 1px solid var(--border-color); 
+            color: var(--text-primary);
+        }
+        
+        .mini-table tfoot { 
+            background: var(--bg-secondary); 
+            font-weight: bold; 
+        }
+        
+        .status-update-section { 
+            background: var(--section-bg); 
+            padding: 25px; 
+            border-radius: 15px; 
+        }
+        
+        .form-group { margin-bottom: 20px; }
+        
+        .form-group label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600; 
+            color: var(--text-secondary); 
+        }
+        
+        .form-group select { 
+            width: 100%; 
+            padding: 15px; 
+            border: 2px solid var(--border-color); 
+            border-radius: 8px; 
+            font-size: 16px; 
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        .form-group select:focus { 
+            outline: none; 
+            border-color: #667eea; 
+        }
+        
+        .form-actions { 
+            display: flex; 
+            gap: 15px; 
+            margin-top: 30px; 
+        }
+        
+        @media (max-width: 768px) { 
+            .container { padding: 15px; } 
+            .navbar { flex-direction: column; align-items: flex-start; }
+            .nav-menu { width: 100%; }
+            .nav-link { flex: 1; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>🧺 LaundryPro</h1>
+            </div>
+            <div class="nav-menu">
+                <a href="{{ url_for('index') }}" class="nav-link">📊 Dashboard</a>
+                <a href="{{ url_for('create_order') }}" class="nav-link">➕ Create Order</a>
+                      </div>
+            <div class="theme-toggle">
+                <span class="toggle-icon">☀️</span>
+                <div class="toggle-switch" id="themeToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+                <span class="toggle-icon">🌙</span>
+            </div>
+        </nav>
+
+        <div class="order-summary">
+            <h2>Order Details</h2>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <label>Order ID:</label>
+                    <span class="highlight">{{ order.order_id }}</span>
+                </div>
+                <div class="detail-item">
+                    <label>Customer:</label>
+                    <span>{{ order.customer_name }}</span>
+                </div>
+                <div class="detail-item">
+                    <label>Phone:</label>
+                    <span>{{ order.phone }}</span>
+                </div>
+                <div class="detail-item">
+                    <label>Total Bill:</label>
+                    <span class="highlight">${{ "%.2f"|format(order.total_amount) }}</span>
+                </div>
+                <div class="detail-item">
+                    <label>Current Status:</label>
+                    <span class="status-badge status-{{ order.status.lower() }}">{{ order.status }}</span>
+                </div>
+                <div class="detail-item">
+                    <label>Order Date:</label>
+                    <span>{{ order.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="garments-summary">
+            <h3>Garments in this Order</h3>
+            <table class="mini-table">
+                <thead>
+                    <tr>
+                        <th>Garment Type</th>
+                        <th>Quantity</th>
+                        <th>Price/Item</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for g in garments %}
+                    <tr>
+                        <td>{{ g.garment_type }}</td>
+                        <td>{{ g.quantity }}</td>
+                        <td>${{ "%.2f"|format(g.price_per_item) }}</td>
+                        <td>${{ "%.2f"|format(g.total) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3"><strong>Grand Total</strong></td>
+                        <td><strong>${{ "%.2f"|format(order.total_amount) }}</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="status-update-section">
+            <h3>Update Status</h3>
+            <form method="POST">
+                <div class="form-group">
+                    <label for="status">Select New Status</label>
+                    <select name="status" id="status" required>
+                        <option value="RECEIVED" {% if order.status == 'RECEIVED' %}selected{% endif %}>📥 RECEIVED</option>
+                        <option value="PROCESSING" {% if order.status == 'PROCESSING' %}selected{% endif %}>⚙️ PROCESSING</option>
+                        <option value="READY" {% if order.status == 'READY' %}selected{% endif %}>✅ READY</option>
+                        <option value="DELIVERED" {% if order.status == 'DELIVERED' %}selected{% endif %}>🚚 DELIVERED</option>
+                    </select>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-large">Update Status</button>
+                    <a href="{{ url_for('index') }}" class="btn btn-outline">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+        
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.setAttribute('data-theme', savedTheme);
+        
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+    </script>
+</body>
+</html>

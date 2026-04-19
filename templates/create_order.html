@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Order</title>
+    <style>
+        /* Light Theme (Default) */
+        [data-theme="light"] {
+            --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-secondary: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #555555;
+            --border-color: #e0e0e0;
+            --section-bg: #f8f9fa;
+            --input-bg: #ffffff;
+            --input-border: #e0e0e0;
+            --shadow: rgba(0,0,0,0.3);
+        }
+        
+        /* Dark Theme */
+        [data-theme="dark"] {
+            --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --bg-secondary: #1e1e2f;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --border-color: #2a2a4a;
+            --section-bg: #2a2a4a;
+            --input-bg: #2a2a4a;
+            --input-border: #3a3a5a;
+            --shadow: rgba(0,0,0,0.5);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; 
+            background: var(--bg-primary); 
+            min-height: 100vh; 
+            padding: 20px;
+            transition: background 0.3s ease;
+        }
+        
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: var(--bg-secondary); 
+            border-radius: 20px; 
+            padding: 30px; 
+            box-shadow: 0 20px 60px var(--shadow);
+            transition: background 0.3s ease;
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-brand h1 {
+            color: var(--text-primary);
+            font-size: 24px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-link {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: var(--text-primary);
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover {
+            background: var(--section-bg);
+        }
+        
+        .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        /* Theme Toggle */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--section-bg);
+            border-radius: 15px;
+            cursor: pointer;
+            border: 2px solid var(--border-color);
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        
+        [data-theme="dark"] .toggle-slider {
+            transform: translateX(30px);
+        }
+        
+        .toggle-icon {
+            font-size: 18px;
+        }
+        
+        h1, h2 { color: var(--text-primary); }
+        h2 { margin-bottom: 20px; }
+        
+        .btn { 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 14px; 
+            font-weight: 600; 
+            text-decoration: none; 
+            display: inline-block; 
+            transition: all 0.3s; 
+        }
+        
+        .btn-primary { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: white; 
+        }
+        
+        .btn-primary:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); 
+        }
+        
+        .btn-secondary { background: #6c757d; color: white; }
+        
+        .btn-outline { 
+            background: transparent; 
+            border: 2px solid #667eea; 
+            color: #667eea; 
+        }
+        
+        [data-theme="dark"] .btn-outline { color: #8b9dff; border-color: #8b9dff; }
+        
+        .btn-outline:hover { background: #667eea; color: white; }
+        
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-large { padding: 15px 30px; font-size: 16px; }
+        
+        .form-section { 
+            background: var(--section-bg); 
+            padding: 25px; 
+            border-radius: 15px; 
+            margin-bottom: 25px; 
+        }
+        
+        .form-group { margin-bottom: 20px; }
+        
+        .form-group label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600; 
+            color: var(--text-secondary); 
+        }
+        
+        .form-group input, 
+        .form-group select { 
+            width: 100%; 
+            padding: 12px 15px; 
+            border: 2px solid var(--input-border); 
+            border-radius: 8px; 
+            font-size: 14px; 
+            background: var(--input-bg);
+            color: var(--text-primary);
+        }
+        
+        .form-group input:focus, 
+        .form-group select:focus { 
+            outline: none; 
+            border-color: #667eea; 
+        }
+        
+        .garment-row { 
+            display: grid; 
+            grid-template-columns: 2fr 1fr 1fr auto; 
+            gap: 15px; 
+            align-items: end; 
+            margin-bottom: 15px; 
+            padding: 15px; 
+            background: var(--bg-secondary); 
+            border-radius: 10px; 
+        }
+        
+        .item-total { 
+            background: var(--section-bg) !important; 
+            font-weight: bold; 
+        }
+        
+        .total-section { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: white; 
+        }
+        
+        .total-section h2 { color: white; }
+        
+        .total-display { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-size: 28px; 
+            font-weight: bold; 
+        }
+        
+        .form-actions { 
+            display: flex; 
+            gap: 15px; 
+            margin-top: 30px; 
+        }
+        
+        @media (max-width: 768px) { 
+            .container { padding: 15px; } 
+            .navbar { flex-direction: column; align-items: flex-start; }
+            .nav-menu { width: 100%; }
+            .nav-link { flex: 1; text-align: center; }
+            .garment-row { grid-template-columns: 1fr; } 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>🧺 LaundryPro</h1>
+            </div>
+            <div class="nav-menu">
+                <a href="{{ url_for('index') }}" class="nav-link">📊 Dashboard</a>
+                <a href="{{ url_for('create_order') }}" class="nav-link active">➕ Create Order</a>
+            </div>
+            <div class="theme-toggle">
+                <span class="toggle-icon">☀️</span>
+                <div class="toggle-switch" id="themeToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+                <span class="toggle-icon">🌙</span>
+            </div>
+        </nav>
+
+        <form method="POST" id="orderForm">
+            <div class="form-section">
+                <h2>Customer Information</h2>
+                <div class="form-group">
+                    <label for="customer_name">Customer Name *</label>
+                    <input type="text" id="customer_name" name="customer_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Garments</h2>
+                <div id="garments-list">
+                    <div class="garment-row">
+                        <div class="form-group">
+                            <label>Garment Type</label>
+                            <select name="garment_type[]" class="garment-type" required>
+                                <option value="">Select...</option>
+                                {% for type, price in prices.items() %}
+                                <option value="{{ type }}" data-price="{{ price }}">{{ type }} (${{ "%.2f"|format(price) }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input type="number" name="quantity[]" min="1" value="1" class="quantity" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Item Total</label>
+                            <input type="text" class="item-total" readonly value="$0.00">
+                        </div>
+                        <button type="button" class="btn btn-danger remove-row" style="display: none;">✕</button>
+                    </div>
+                </div>
+                <button type="button" id="add-row" class="btn btn-secondary">+ Add Another Garment</button>
+            </div>
+
+            <div class="form-section total-section">
+                <h2>Billing Summary</h2>
+                <div class="total-display">
+                    <span>Total Amount:</span>
+                    <span id="grand-total">$0.00</span>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-large">Create Order</button>
+                <a href="{{ url_for('index') }}" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+    <script id="price-data" type="application/json">{{ prices|tojson }}</script>
+    
+    <script>
+        (function() {
+            // Theme Toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const htmlElement = document.documentElement;
+            
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            htmlElement.setAttribute('data-theme', savedTheme);
+            
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                
+                htmlElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            });
+            
+            // Price calculation logic
+            var priceDataElement = document.getElementById('price-data');
+            var priceData = JSON.parse(priceDataElement.textContent);
+            
+            function calculateRowTotal(row) {
+                var select = row.querySelector('.garment-type');
+                var quantity = row.querySelector('.quantity');
+                var totalInput = row.querySelector('.item-total');
+                
+                var selectedOption = select.options[select.selectedIndex];
+                var price = parseFloat(selectedOption.dataset.price) || 0;
+                var qty = parseInt(quantity.value) || 0;
+                
+                var total = price * qty;
+                totalInput.value = '$' + total.toFixed(2);
+                
+                return total;
+            }
+            
+            function calculateGrandTotal() {
+                var rows = document.querySelectorAll('.garment-row');
+                var grandTotal = 0;
+                
+                rows.forEach(function(row) {
+                    grandTotal += calculateRowTotal(row);
+                });
+                
+                document.getElementById('grand-total').textContent = '$' + grandTotal.toFixed(2);
+            }
+            
+            function attachRowListeners(row) {
+                var select = row.querySelector('.garment-type');
+                var quantity = row.querySelector('.quantity');
+                
+                select.addEventListener('change', calculateGrandTotal);
+                quantity.addEventListener('input', calculateGrandTotal);
+            }
+            
+            document.getElementById('add-row').addEventListener('click', function() {
+                var container = document.getElementById('garments-list');
+                var firstRow = document.querySelector('.garment-row');
+                var newRow = firstRow.cloneNode(true);
+                
+                newRow.querySelector('.garment-type').value = '';
+                newRow.querySelector('.quantity').value = 1;
+                newRow.querySelector('.item-total').value = '$0.00';
+                
+                var removeBtn = newRow.querySelector('.remove-row');
+                removeBtn.style.display = 'block';
+                removeBtn.addEventListener('click', function() {
+                    newRow.remove();
+                    calculateGrandTotal();
+                });
+                
+                attachRowListeners(newRow);
+                container.appendChild(newRow);
+            });
+            
+            document.querySelectorAll('.garment-row').forEach(function(row) {
+                attachRowListeners(row);
+            });
+            
+            calculateGrandTotal();
+        })();
+    </script>
+</body>
+</html>
